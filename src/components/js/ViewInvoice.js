@@ -1,17 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../supabase';
 import classnames from 'classnames';
 
-function ViewInvoice() {
-  const { id } = useParams();
-  const [invoiceData, setInvoiceData] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [items, setItems] = useState([]);
-  const total = items.reduce((acc, item) => acc + item.quantity * item.rate, 0);
 
-  const status = invoiceData?.status;
+function ViewInvoice() {
+const { id } = useParams();
+const [invoiceData, setInvoiceData] = useState(null);
+const [error, setError] = useState(null);
+const [loading, setLoading] = useState(true);
+const [items, setItems] = useState([]);
+const total = items.reduce((acc, item) => acc + item.quantity * item.rate, 0);
+const navigate = useNavigate();
+const status = invoiceData?.status;
 
   const containerClasses = classnames('rounded', {
     'bg-orangebg': status === 'pending',
@@ -71,6 +72,25 @@ function ViewInvoice() {
 
   }, [id]);
 
+  const handleDeleteInvoice = async () => {
+    try {
+      const { error } = await supabase
+        .from('Invoice')
+        .delete()
+        .eq('Invoice_id', id);
+
+      if (error) {
+        throw error;
+      }
+
+      console.log('Invoice deleted successfully');
+      navigate('../');
+    } catch (error) {
+      console.error('An unexpected error occurred:', error);
+    }
+  };
+
+
   const handleMarkAsRead = async () => {
     try {
       const currentStatus = invoiceData.status;
@@ -119,20 +139,20 @@ function ViewInvoice() {
 
           <div className='flex gap-6'>
             <Link to={`../view/${id}/edit`}>
-              <button className='bg-totals p-3 rounded-lg'>Edit</button>
+              <button className='bg-totals p-3 text-small text-base rounded-lg'>Edit</button>
             </Link>
-            <button className='bg-orange p-3 rounded-lg'>Delete</button>
+            <button className='bg-orange p-3 text-base rounded-lg' onClick={handleDeleteInvoice}>Delete</button>
 
             {invoiceData.status === 'paid' ? (
-              <button className={`bg-purple p-3 rounded-lg`} onClick={handleMarkAsRead}> Mark as Pending</button>
+              <button className={`bg-purple p-1 md:p-3 rounded-lg`} onClick={handleMarkAsRead}> Mark as Pending</button>
             ) : (
-              <button className={`bg-purple p-3 rounded-lg`} onClick={handleMarkAsRead}>Mark as paid</button>
+              <button className={`bg-purple p-1 md:p-3 rounded-lg`} onClick={handleMarkAsRead}>Mark as paid</button>
             )}
           </div>
         
 
             </div>
-            <div className='mt-12 bg-card rounded-lg p-10'>
+            <div className='mt-12 bg-card rounded-lg p-3 md:p-10'>
               <div className='w-full flex justify-between'>
                 <div className='reference'>
                   <h1 className='text-2xl mb-3'>{invoiceData.reference}</h1>
@@ -202,7 +222,7 @@ function ViewInvoice() {
                     </table>
                   </div>
                 ) : (
-                  <p>No items found for this invoice.</p>
+                  <p className='mt-[100px]'>No items found for this invoice.</p>
                 )}
               </div>
             </div>

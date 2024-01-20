@@ -2,6 +2,7 @@
     --text: #fff;
     --clr: #7808d0;
     font-family: inter;
+    --textsize: 15px;
 }
 
 body {

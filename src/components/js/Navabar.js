@@ -8,24 +8,26 @@ function Navabar() {
     const [totalInvoices, setTotalInvoices] = useState(0);
 
     useEffect(() => {
-      const fetchTotalInvoices = async () => {
-        try {
-          const { count, error } = await supabase
-            .from('Invoice')
-            .select('count', { head: true });
-  
-          if (error) {
-            throw error;
+        const fetchTotalInvoices = async () => {
+          try {
+            const { data: invoices, error } = await supabase
+              .from('Invoice')
+              .select('Invoice_id');
+      
+            if (error) {
+              throw error;
+            }
+      
+            const totalCount = invoices ? invoices.length : 0;
+            console.log('Total Invoices Count:', totalCount); // Add this line for debugging
+            setTotalInvoices(totalCount);
+          } catch (error) {
+            console.error('Error fetching total invoices:', error);
           }
-  
-          setTotalInvoices(count);
-        } catch (error) {
-          console.error('Error fetching total invoices:', error);
-        }
-      };
-  
-      fetchTotalInvoices();
-    }, []);
+        };
+      
+        fetchTotalInvoices();
+      }, []);
   
   return (
     <div className='navi w-full'>
