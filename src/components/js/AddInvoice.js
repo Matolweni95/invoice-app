@@ -1,6 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import { supabase } from '../supabase';
 import { Link, useNavigate } from 'react-router-dom';
+import DatetimePicker from 'react-datetime-picker'; 
+
 
 const AddInvoice = () => {
   const initialFormData = {
@@ -22,12 +24,15 @@ const AddInvoice = () => {
     currentItem: { description: '', quantity: 1, rate: 0 },
     items: [],
   };
-
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [validationError, setValidationError] = useState('');
   const [formData, setFormData] = useState(initialFormData);
   const [invoices, setInvoices] = useState([]);
   const [code, setCode] = useState('');
   const navigate = useNavigate();
   const handleInputChange = (key, value) => {
+    
     setFormData({
       ...formData,
       currentItem: {
@@ -45,6 +50,15 @@ const AddInvoice = () => {
     });
   };
 
+  const handleStartDateChange = (date) => {
+    setStartDate(date);
+    // Add any additional logic you need for the start date change
+  };
+
+  const handleEndDateChange = (date) => {
+    setEndDate(date);
+    // Add any additional logic you need for the end date change
+  };
 
   const handleDeleteItem = (index) => {
     const updatedItems = [...formData.items];
@@ -150,17 +164,32 @@ const AddInvoice = () => {
   
       console.log('Data inserted successfully. Inserted ID:', insertedId);
       navigate('../');
+      if (!validateDates()) {
+        console.error('Due date must be after the invoice date.');
+        setValidationError('Due date must be after the invoice date.');
+        return;
+      }
+
+      // Existing code...
+
+      console.log('Data inserted successfully. Inserted ID:', insertedId);
+      navigate('../');
     } catch (error) {
       console.error('An unexpected error occurred:', error);
     }
-  }
+  };
   
+  const validateDates = () => {
+    const { invoiceDate, dueDate } = formData;
 
+    // Validate that due date is after the invoice date
+    return new Date(dueDate) > new Date(invoiceDate);
+  };
 
   return (
-    <div className="max-w-3xl bg-invoice mx-auto p-6 shadow-md rounded-lg">
+    <div className="max-w-3xl bg-card mx-auto p-6 m-8 shadow-md rounded-lg text-cream">
       <Link to="../">
-      <button className='bg-purple px-4 py-2 rounded-md mt-4 mb-4 flex items-center gap-4'>
+      <button className='bg-cream text-card px-4 py-2 rounded-md mt-4 mb-4 flex items-center gap-4'>
         <div className='fill-white'>
           <svg xmlns="http://www.w3.org/2000/svg" height="16" width="10" viewBox="0 0 320 512">
             <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" />
@@ -169,13 +198,13 @@ const AddInvoice = () => {
         Go Back
       </button>
       </Link>
-      <h2 className="text-1xl text-purple font-bold mb-4 mt-12">Bill From</h2>
+      <h2 className="text-1xl text-cream font-bold mb-4 mt-12">Bill From</h2>
   
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">Street Address</label>
         <input
           type="text"
-          className="mt-1 p-2 bg-totals w-full rounded-md"
+          className="mt-1 p-2 bg-cream text-card outline-none w-full rounded-md"
           value={formData.billFromStreetAddress}
           onChange={(e) => setFormData({ ...formData, billFromStreetAddress: e.target.value })}
         />
@@ -186,7 +215,7 @@ const AddInvoice = () => {
           <label className="block text-sm font-medium text-gray-600">City</label>
           <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream w-full text-card outline-none rounded-md"
             value={formData.billFromCity}
             onChange={(e) => setFormData({ ...formData, billFromCity: e.target.value })}
           />
@@ -195,7 +224,7 @@ const AddInvoice = () => {
           <label className="block text-sm font-medium text-gray-600">Postal Code</label>
           <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream w-full text-card outline-none rounded-md"
             value={formData.billFromPostalCode}
             onChange={(e) => setFormData({ ...formData, billFromPostalCode: e.target.value })}
           />
@@ -204,20 +233,20 @@ const AddInvoice = () => {
           <label className="block text-sm font-medium text-gray-600">Country</label>
           <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream w-full text-card outline-none rounded-md"
             value={formData.billFromCountry}
             onChange={(e) => setFormData({ ...formData, billFromCountry: e.target.value })}
           />
         </div>
       </div>
   
-      <h2 className="text-1xl text-purple font-bold mb-4 mt-12">Bill To</h2>
+      <h2 className="text-1xl text-cream font-bold mb-4 mt-12">Bill To</h2>
   
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-600">Client Name</label>
         <input
           type="text"
-          className="mt-1 p-2 bg-totals w-full rounded-md"
+          className="mt-1 p-2 bg-cream w-full text-card outline-none rounded-md"
           value={formData.clientName}
           onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
         />
@@ -227,7 +256,7 @@ const AddInvoice = () => {
         <label className="block text-sm font-medium text-gray-600">Client Email</label>
         <input
           type="email"
-          className="mt-1 p-2 w-full bg-totals rounded-md"
+          className="mt-1 p-2 w-full bg-cream text-card outline-none rounded-md"
           value={formData.clientEmail}
           onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
         />
@@ -237,7 +266,7 @@ const AddInvoice = () => {
         <label className="block text-sm font-medium text-gray-600">Street Address</label>
         <input
           type="text"
-          className="mt-1 p-2 bg-totals w-full rounded-md"
+          className="mt-1 p-2 bg-cream w-full text-card outline-none rounded-md"
           value={formData.billToStreetAddress}
           onChange={(e) => setFormData({ ...formData, billToStreetAddress: e.target.value })}
         />
@@ -248,7 +277,7 @@ const AddInvoice = () => {
           <label className="block text-sm font-medium text-gray-600">City</label>
           <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream w-full text-card outline-none rounded-md"
             value={formData.billToCity}
             onChange={(e) => setFormData({ ...formData, billToCity: e.target.value })}
           />
@@ -257,7 +286,7 @@ const AddInvoice = () => {
           <label className="block text-sm font-medium text-gray-600">Postal Code</label>
           <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream w-full text-card outline-none rounded-md"
             value={formData.billToPostalCode}
             onChange={(e) => setFormData({ ...formData, billToPostalCode: e.target.value })}
           />
@@ -266,34 +295,34 @@ const AddInvoice = () => {
           <label className="block text-sm font-medium text-gray-600">Country</label>
           <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream text-card outline-none w-full rounded-md"
             value={formData.billToCountry}
             onChange={(e) => setFormData({ ...formData, billToCountry: e.target.value })}
           />
         </div>
       </div>
 
-    <div className="flex mb-4 gap-10 flex-col md:flex-row">
-      <div className="flex-1">
-        <label className="block text-sm font-medium text-gray-600">Invoice Date</label>
-        <input
-          type="date"
-          className="mt-1 p-2 w-full bg-totals rounded-md"
-          value={formData.invoiceDate}
-          onChange={(e) => setFormData({ ...formData, invoiceDate: e.target.value })}
-        />
+      <div className="flex mb-4 gap-10 flex-col md:flex-row">
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-gray-600">Invoice Date</label>
+          <DatetimePicker
+            onChange={(date) => handleStartDateChange(date)}
+            value={startDate}
+            format="yyyy-MM-dd"
+          />
+        </div>
+
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-gray-600">Due Date</label>
+          <DatetimePicker
+            onChange={(date) => handleEndDateChange(date)}
+            value={endDate}
+            format="yyyy-MM-dd"
+          />
+        </div>
       </div>
 
-      <div className="flex-1">
-        <label className="block text-sm font-medium text-gray-600">Due Date</label>
-        <input
-          type="date"
-          className="mt-1 p-2 w-full bg-totals rounded-md"
-          value={formData.dueDate}
-          onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
-        />
-      </div>
-    </div>
+      {validationError && <p style={{ color: 'red' }}>{validationError}</p>}
 
     <div className="mt-4">
       <h3 className="text-xl font-semibold mb-2 mt-12">Add Item</h3>
@@ -303,32 +332,32 @@ const AddInvoice = () => {
           placeholder="Item Name"
           value={formData.currentItem.description}
           onChange={(e) => handleInputChange('description', e.target.value)}
-          className="p-2 bg-totals rounded-md"
+          className="p-2 bg-cream text-card outline-none rounded-md"
         />
         <input
           type="number"
           placeholder="Quantity"
           value={formData.currentItem.quantity}
           onChange={(e) => handleInputChange('quantity', parseInt(e.target.value, 10))}
-          className="p-2 bg-totals rounded-md"
+          className="p-2 bg-cream text-card outline-none rounded-md"
         />
         <input
           type="number"
-          placeholder="Rate"
+          placeholder="Price"
           value={formData.currentItem.rate}
           onChange={(e) => handleInputChange('rate', parseFloat(e.target.value))}
-          className="p-2 bg-totals rounded-md "
+          className="p-2 bg-cream text-card outline-none rounded-md "
         />
       </div>
       <button
-        className="bg-purple text-white px-4 py-2 rounded-md mt-5 mb-12"
+        className="bg-cream text-card px-4 py-2 rounded-md mt-5 mb-12"
         onClick={handleAddItem}
       >
         Add Item
       </button>
     </div>
 
-    <div className="mt-4 bg-totals rounded-lg">
+    <div className="mt-4 bg-cream text-card rounded-lg">
       <table className="w-full text-[small] md:text-base">
         <thead>
           <tr className="">
@@ -349,7 +378,7 @@ const AddInvoice = () => {
               <td className="p-2">R{(item.quantity * item.rate).toFixed(2)}</td>
               <td className="p-2">
                 <button
-                  className="bg-warn text-white px-2 py-1 rounded-md"
+                  className="bg-warn text-card px-2 py-1 rounded-md"
                   onClick={() => handleDeleteItem(index)}
                 >
                   <div className='fill-white'>
@@ -379,7 +408,7 @@ const AddInvoice = () => {
     </div>
 
     <div className="mt-8">
-      <button className="bg-purple text-white px-6 py-3 rounded-md" onClick={handleGenerateInvoice}>
+      <button className="bg-cream text-card px-6 py-3 rounded-md" onClick={handleGenerateInvoice}>
         Generate Invoice
       </button>
     </div>

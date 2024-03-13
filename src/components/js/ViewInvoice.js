@@ -16,12 +16,12 @@ const status = invoiceData?.status;
 
   const containerClasses = classnames('rounded', {
     'bg-orangebg': status === 'pending',
-    'bg-greenbg': status !== 'pending',
+    'bg-cream': status !== 'pending',
   });
 
   const textClasses = classnames('p-3', {
     'text-orangetext': status === 'pending',
-    'text-greentext': status !== 'pending',
+    'text-card': status !== 'pending',
   });
 
   const fetchItems = async () => {
@@ -120,18 +120,18 @@ const status = invoiceData?.status;
 
   return (
     <>
-      <div className='view__container'>
+      <div className='view__container p-9'>
         <Link to ="../">
-        <button className='px-4 py-2 rounded-md mt-4 mb-4 flex items-center gap-4'>
+        <button className='px-4 py-2 bg-card text-cream rounded-md mt-4 mb-4 flex items-center gap-4'>
           <div className='fill-purple'>
-            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="10" viewBox="0 0 320 512"><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" height="16" width="10" viewBox="0 0 320 512" fill='#E6DBD0'><path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z"/></svg>
           </div>
           Go Back
         </button>
         </Link>
-        <div className={`top__card w-full flex flex-col md:flex-row gap-5 justify-between bg-card p-6`}>
+        <div className={`top__card w-full flex flex-col md:flex-row gap-5 justify-between bg-card p-6 rounded-lg`}>
         <div className='flex items-center gap-5'>
-            <p>Status</p>
+            <p className='text-cream'>Status</p>
             <div className={`status-container ${containerClasses}`}>
             <p className={`${textClasses} rounded-lg`}><span>&bull;</span>{invoiceData.status}</p>
             </div>
@@ -141,7 +141,7 @@ const status = invoiceData?.status;
             <Link to={`../view/${id}/edit`}>
               <button className='bg-totals p-3 text-small text-base rounded-lg'>Edit</button>
             </Link>
-            <button className='bg-orange p-3 text-base rounded-lg' onClick={handleDeleteInvoice}>Delete</button>
+            <button className='bg-danger p-3 text-base rounded-lg' onClick={handleDeleteInvoice}>Delete</button>
 
             {invoiceData.status === 'paid' ? (
               <button className={`bg-purple p-1 md:p-3 rounded-lg`} onClick={handleMarkAsRead}> Mark as Pending</button>
@@ -152,7 +152,7 @@ const status = invoiceData?.status;
         
 
             </div>
-            <div className='mt-12 bg-card rounded-lg p-3 md:p-10'>
+            <div className='mt-12 bg-card rounded-lg p-3 md:p-10 text-cream'>
               <div className='w-full flex justify-between'>
                 <div className='reference'>
                   <h1 className='text-2xl mb-3'>{invoiceData.reference}</h1>
@@ -193,8 +193,8 @@ const status = invoiceData?.status;
               </div>
               <div className='items flex justify-center items-center'>
                 {items.length > 0 ? (
-                  <div className="mt-12 bg-totals rounded-lg w-full">
-                    <table className="w-full">
+                  <div className="mt-12 bg-cream rounded-lg w-full">
+                    <table className="w-full text-card">
                       <thead>
                         <tr>
                           <th className="p-2">Item</th>

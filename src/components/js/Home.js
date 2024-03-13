@@ -4,7 +4,7 @@ function Home({ children }) {
   return (
     <div className='home'>
       <div className="flex flex-col md:flex-row h-full">
-        <nav className="bg-blue2 w-full md:w-20 justify-between md:flex flex-col items-center">
+        <nav className="bg-card w-full md:w-20 justify-between md:flex flex-col items-center">
           <div className="mt-5 md:mt-10 md:mb-10 mb-5">
             <a href="#">
               <img

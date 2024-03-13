@@ -4,7 +4,7 @@
     display: inline-flex;
     align-items: center;
     gap: .75rem;
-    color: #fff;
+    color: #E6DBD0;
     border-radius: 10rem;
     font-weight: 600;
     padding-left: 10px;
@@ -15,9 +15,9 @@
     transition: background-color .3s;
   }
 
-  input {
+  /* input {
     background-color: gray;
-  }
+  } */
   
   .button__icon-wrapper {
     flex-shrink: 0;
@@ -25,7 +25,7 @@
     height: 25px;
     position: relative;
     color: var(--clr);
-    background-color: #fff;
+    background-color: #E6DBD0;
     border-radius: 50%;
     display: grid;
     place-items: center;

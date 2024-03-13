@@ -121,9 +121,9 @@ function EditInvoice() {
     
 
     return (
-    <div className="max-w-3xl bg-invoice mx-auto p-6 shadow-md rounded-lg">
+    <div className="max-w-3xl bg-card mx-auto p-6 m-9 shadow-md  rounded-lg">
         <Link to="*/../../">
-            <button className='bg-purple px-4 py-2 rounded-md mt-4 mb-4 flex items-center gap-4'>
+            <button className='bg-cream px-4 py-2 rounded-md mt-4 mb-4 flex items-center gap-4'>
             <div className='fill-white'>
                 <svg xmlns="http://www.w3.org/2000/svg" height="16" width="10" viewBox="0 0 320 512">
                 <path d="M9.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l192 192c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L77.3 256 246.6 86.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-192 192z" />
@@ -132,13 +132,13 @@ function EditInvoice() {
             Go Back
             </button>
         </Link>
-        <h2 className="text-1xl text-purple font-bold mb-4 mt-12">Bill From</h2>
+        <h2 className="text-1xl text-cream font-bold mb-4 mt-12">Bill From</h2>
     
-        <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">Street Address</label>
+        <div className="mb-4 ">
+        <label className="block text-sm font-medium text-cream">Street Address</label>
         <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream outline-none text-card w-full rounded-md"
             value={formData.billFromStreetAddress}
             onChange={(e) => setFormData({ ...formData, billFromStreetAddress: e.target.value })}
         />
@@ -146,61 +146,61 @@ function EditInvoice() {
     
         <div className="mb-4 flex gap-5 flex-col md:flex-row">
         <div>
-            <label className="block text-sm font-medium text-gray-600">City</label>
+            <label className="block text-sm font-medium text-cream">City</label>
             <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream outline-none text-card w-full rounded-md"
             value={formData.billFromCity}
             onChange={(e) => setFormData({ ...formData, billFromCity: e.target.value })}
             />
         </div>
         <div>
-            <label className="block text-sm font-medium text-gray-600">Postal Code</label>
+            <label className="block text-sm font-medium text-cream">Postal Code</label>
             <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream outline-none text-card w-full rounded-md"
             value={formData.billFromPostal}
             onChange={(e) => setFormData({ ...formData, billFromPostal: e.target.value })}
             />
         </div>
         <div>
-            <label className="block text-sm font-medium text-gray-600">Country</label>
+            <label className="block text-sm font-medium text-cream">Country</label>
             <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream outline-none text-card w-full rounded-md"
             value={formData.billFromCountry}
             onChange={(e) => setFormData({ ...formData, billFromCountry: e.target.value })}
             />
         </div>
         </div>
     
-        <h2 className="text-1xl text-purple font-bold mb-4 mt-12">Bill To</h2>
+        <h2 className="text-1xl text-cream font-bold mb-4 mt-12">Bill To</h2>
     
         <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">Client Name</label>
+        <label className="block text-sm font-medium text-cream">Client Name</label>
         <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream outline-none text-card w-full rounded-md"
             value={formData.clientName}
             onChange={(e) => setFormData({ ...formData, clientName: e.target.value })}
         />
         </div>
     
         <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">Client Email</label>
+        <label className="block text-sm font-medium text-cream">Client Email</label>
         <input
             type="email"
-            className="mt-1 p-2 w-full bg-totals rounded-md"
+            className="mt-1 p-2 w-full bg-cream outline-none text-card rounded-md"
             value={formData.clientEmail}
             onChange={(e) => setFormData({ ...formData, clientEmail: e.target.value })}
         />
         </div>
     
         <div className="mb-4">
-        <label className="block text-sm font-medium text-gray-600">Street Address</label>
+        <label className="block text-sm font-medium text-cream">Street Address</label>
         <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream outline-none text-card w-full rounded-md"
             value={formData.billToAddress}
             onChange={(e) => setFormData({ ...formData, billToAddress: e.target.value })}
         />
@@ -208,28 +208,28 @@ function EditInvoice() {
     
         <div className="mb-4 flex gap-5 flex-col md:flex-row">
         <div>
-            <label className="block text-sm font-medium text-gray-600">City</label>
+            <label className="block text-sm font-medium text-cream">City</label>
             <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream outline-none text-card w-full rounded-md"
             value={formData.billToCity}
             onChange={(e) => setFormData({ ...formData, billToCity: e.target.value })}
             />
         </div>
         <div>
-            <label className="block text-sm font-medium text-gray-600">Postal Code</label>
+            <label className="block text-sm font-medium text-cream">Postal Code</label>
             <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream outline-none text-card w-full rounded-md"
             value={formData.billToPostal}
             onChange={(e) => setFormData({ ...formData, billToPostal: e.target.value })}
             />
         </div>
         <div>
-            <label className="block text-sm font-medium text-gray-600">Country</label>
+            <label className="block text-sm font-medium text-cream">Country</label>
             <input
             type="text"
-            className="mt-1 p-2 bg-totals w-full rounded-md"
+            className="mt-1 p-2 bg-cream outline-none text-card w-full rounded-md"
             value={formData.billToCountry}
             onChange={(e) => setFormData({ ...formData, billToCountry: e.target.value })}
             />
@@ -238,20 +238,20 @@ function EditInvoice() {
 
     <div className="flex mb-4 gap-10 flex-col md:flex-row">
         <div className="flex-1">
-        <label className="block text-sm font-medium text-gray-600">Invoice Date</label>
+        <label className="block text-sm font-medium text-cream">Invoice Date</label>
         <input
             type="date"
-            className="mt-1 p-2 w-full bg-totals rounded-md"
+            className="mt-1 p-2 w-full bg-cream outline-none text-card rounded-md"
             value={formData.invoiceDate}
             onChange={(e) => setFormData({ ...formData, invoiceDate: e.target.value })}
         />
         </div>
 
         <div className="flex-1">
-        <label className="block text-sm font-medium text-gray-600">Due Date</label>
+        <label className="block text-sm font-medium text-cream">Due Date</label>
         <input
             type="date"
-            className="mt-1 p-2 w-full bg-totals rounded-md"
+            className="mt-1 p-2 w-full bg-cream outline-none text-card rounded-md"
             value={formData.dueDate}
             onChange={(e) => setFormData({ ...formData, dueDate: e.target.value })}
         />
@@ -285,7 +285,7 @@ function EditInvoice() {
     </div> */}
 
     <div className="mt-8">
-        <button className="bg-purple text-white px-6 py-3 rounded-md" onClick={handleUpdateInvoice}>
+        <button className="bg-cream text-card px-6 py-3 rounded-md" onClick={handleUpdateInvoice}>
         Update Invoice
         </button>
     </div>

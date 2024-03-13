@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Navabar from './Navabar';
 import Card from './Card';
-import { supabase } from '../supabase'; // Assuming you have a supabase configuration file
+import { supabase } from '../supabase'; 
 
 function Landing() {
   const [invoices, setInvoices] = useState([]);
