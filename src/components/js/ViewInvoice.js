@@ -131,22 +131,22 @@ const status = invoiceData?.status;
         </Link>
         <div className={`top__card w-full flex flex-col md:flex-row gap-5 justify-between bg-card p-6 rounded-lg`}>
         <div className='flex items-center gap-5'>
-            <p className='text-cream'>Status</p>
-            <div className={`status-container ${containerClasses}`}>
+            <p className='text-cream text-sm md:text-base'>Status</p>
+            <div className={`status-container text-sm md:text-base ${containerClasses}`}>
             <p className={`${textClasses} rounded-lg`}><span>&bull;</span>{invoiceData.status}</p>
             </div>
         </div>
 
-          <div className='flex gap-6'>
+          <div className='flex gap-6 text-sm'>
             <Link to={`../view/${id}/edit`}>
-              <button className='bg-totals p-3 text-small text-base rounded-lg'>Edit</button>
+              <button className='bg-cream p-3 text-small text-base rounded-lg'>Edit</button>
             </Link>
-            <button className='bg-danger p-3 text-base rounded-lg' onClick={handleDeleteInvoice}>Delete</button>
+            <button className='bg-cream p-3  rounded-lg' onClick={handleDeleteInvoice}>Delete</button>
 
             {invoiceData.status === 'paid' ? (
-              <button className={`bg-purple p-1 md:p-3 rounded-lg`} onClick={handleMarkAsRead}> Mark as Pending</button>
+              <button className={`bg-cream p-1 md:p-3 rounded-lg`} onClick={handleMarkAsRead}> Mark as Pending</button>
             ) : (
-              <button className={`bg-purple p-1 md:p-3 rounded-lg`} onClick={handleMarkAsRead}>Mark as paid</button>
+              <button className={`bg-cream p-1 md:p-3 rounded-lg`} onClick={handleMarkAsRead}>Mark as paid</button>
             )}
           </div>
         
@@ -155,17 +155,17 @@ const status = invoiceData?.status;
             <div className='mt-12 bg-card rounded-lg p-3 md:p-10 text-cream'>
               <div className='w-full flex justify-between'>
                 <div className='reference'>
-                  <h1 className='text-2xl mb-3'>{invoiceData.reference}</h1>
-                  <p>Graphic Design</p>
+                  <h1 className='text-xl md:text-2xl mb-3'>{invoiceData.reference}</h1>
+                  <p className='text-sm md:text-base'>Graphic Design</p>
                 </div>
-                <div className='address'>
+                <div className='address text-sm md:text-base'>
                   <p>{invoiceData.billFromStreetAddress}</p>
                   <p>{invoiceData.billFromCity}</p>
                   <p>{invoiceData.billFromPostal}</p>
                   <p>{invoiceData.billFromCountry}</p>
                 </div>
               </div>
-              <div className='invoice__details mt-9 flex justify-between'>
+              <div className='invoice__details text-sm md:text-base mt-9 flex justify-between'>
                 <div className='invoice__dates flex flex-col gap-10'>
                   <div>
                     <p>Invoice Date</p>
@@ -187,7 +187,7 @@ const status = invoiceData?.status;
                   </div>
                 </div>
               </div>
-              <div className='sentto'>
+              <div className='sentto text-sm md:text-base'>
                 <p>Sent to</p>
                 <h1 className='font-semibold'>{invoiceData.clientEmail}</h1>
               </div>

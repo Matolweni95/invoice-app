@@ -1,8 +1,8 @@
 import React, { useState, useEffect} from 'react';
 import { supabase } from '../supabase';
 import { Link, useNavigate } from 'react-router-dom';
-import DatetimePicker from 'react-datetime-picker'; 
-
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 const AddInvoice = () => {
   const initialFormData = {
@@ -31,6 +31,28 @@ const AddInvoice = () => {
   const [invoices, setInvoices] = useState([]);
   const [code, setCode] = useState('');
   const navigate = useNavigate();
+  const [issueDate, setIssueDate] = useState(null);
+  const [dueDate, setDueDate] = useState(null);
+  const [error, setError] = useState('');
+
+  const handleIssueDateChange = (date) => {
+    setIssueDate(date);
+    validateDates(date, dueDate);
+  };
+
+  const handleDueDateChange = (date) => {
+    setDueDate(date);
+    validateDates(issueDate, date);
+  };
+
+  const validateDates = (issueDate, dueDate) => {
+    if (issueDate && dueDate && dueDate < issueDate) {
+      setError('Due date cannot be before the issue date');
+    } else {
+      setError('');
+    }
+  };
+
   const handleInputChange = (key, value) => {
     
     setFormData({
@@ -178,16 +200,11 @@ const AddInvoice = () => {
       console.error('An unexpected error occurred:', error);
     }
   };
-  
-  const validateDates = () => {
-    const { invoiceDate, dueDate } = formData;
 
-    // Validate that due date is after the invoice date
-    return new Date(dueDate) > new Date(invoiceDate);
-  };
 
   return (
-    <div className="max-w-3xl bg-card mx-auto p-6 m-8 shadow-md rounded-lg text-cream">
+    <div className="flex items-center justify-center  m-8  text-cream">
+      <div className='bg-card p-6 rounded-lg shadow-md'>
       <Link to="../">
       <button className='bg-cream text-card px-4 py-2 rounded-md mt-4 mb-4 flex items-center gap-4'>
         <div className='fill-white'>
@@ -301,28 +318,29 @@ const AddInvoice = () => {
           />
         </div>
       </div>
-
-      <div className="flex mb-4 gap-10 flex-col md:flex-row">
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-600">Invoice Date</label>
-          <DatetimePicker
-            onChange={(date) => handleStartDateChange(date)}
-            value={startDate}
-            format="yyyy-MM-dd"
+      <div className='flex justify-between'>
+        <div>
+          <label htmlFor="issueDate">Issue Date:</label>
+          <DatePicker
+            id="issueDate"
+            selected={issueDate}
+            onChange={handleIssueDateChange}
+            dateFormat="yyyy-MM-dd"
+            className='bg-cream p-2 rounded ml-2 text-card'
           />
         </div>
-
-        <div className="flex-1">
-          <label className="block text-sm font-medium text-gray-600">Due Date</label>
-          <DatetimePicker
-            onChange={(date) => handleEndDateChange(date)}
-            value={endDate}
-            format="yyyy-MM-dd"
+        <div>
+          <label htmlFor="dueDate">Due Date:</label>
+          <DatePicker
+            id="dueDate"
+            selected={dueDate}
+            onChange={handleDueDateChange}
+            dateFormat="yyyy-MM-dd"
+            className='bg-cream p-2 rounded ml-2 text-card'
           />
         </div>
       </div>
-
-      {validationError && <p style={{ color: 'red' }}>{validationError}</p>}
+      {error && <div style={{ color: 'red' }}>{error}</div>}
 
     <div className="mt-4">
       <h3 className="text-xl font-semibold mb-2 mt-12">Add Item</h3>
@@ -412,6 +430,7 @@ const AddInvoice = () => {
         Generate Invoice
       </button>
     </div>
+  </div>
   </div>
 );
 
