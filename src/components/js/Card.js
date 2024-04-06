@@ -16,6 +16,7 @@ function Card({ data }) {
     'text-greentext': status !== 'pending',
   });
 
+  
   return (
     <>
    <Link className='w-full md:w-auto' to={`../view/${id}`}>
