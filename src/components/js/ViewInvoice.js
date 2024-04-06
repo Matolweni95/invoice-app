@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { supabase } from '../supabase';
 import classnames from 'classnames';
+import { PDFDownloadLink, PDFViewer, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+import html2canvas from 'html2canvas';
+import jsPDF from 'jspdf';
+
 
 
 function ViewInvoice() {
@@ -71,6 +75,7 @@ const status = invoiceData?.status;
     fetchInvoiceData();
 
   }, [id]);
+  
 
   const handleDeleteInvoice = async () => {
     try {
@@ -89,6 +94,18 @@ const status = invoiceData?.status;
       console.error('An unexpected error occurred:', error);
     }
   };
+
+  const handleDownloadPDF = () => {
+    const input = document.getElementById('invoice-container');
+
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL('image/png');
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, 'PNG', 0, 0);
+      pdf.save('invoice.pdf');
+    });
+  };
+
 
 
   const handleMarkAsRead = async () => {
@@ -128,6 +145,7 @@ const status = invoiceData?.status;
           </div>
           Go Back
         </button>
+        {/* <button onClick={handleDownloadPDF}>Download PDF</button> */}
         </Link>
         <div className={`top__card w-full flex flex-col md:flex-row gap-5 justify-between bg-card p-6 rounded-lg`}>
         <div className='flex items-center gap-5'>

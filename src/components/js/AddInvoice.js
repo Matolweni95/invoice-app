@@ -5,6 +5,17 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 const AddInvoice = () => {
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
+  const [validationError, setValidationError] = useState('');
+  const [formData, setFormData] = useState(initialFormData);
+  const [invoices, setInvoices] = useState([]);
+  const [code, setCode] = useState('');
+  const navigate = useNavigate();
+  const [issueDate, setIssueDate] = useState(null);
+  const [dueDate, setDueDate] = useState(null);
+  const [error, setError] = useState('');
+
   const initialFormData = {
     billFromStreetAddress: '',
     billFromCity: '',
@@ -21,32 +32,32 @@ const AddInvoice = () => {
     status: 'pending',
     invoiceDate: '',
     dueDate: '',
-    currentItem: { description: '', quantity: 1, rate: 0 },
+    currentItem: { description: '', quantity: '', rate: '' },
     items: [],
   };
-  const [startDate, setStartDate] = useState(null);
-  const [endDate, setEndDate] = useState(null);
-  const [validationError, setValidationError] = useState('');
-  const [formData, setFormData] = useState(initialFormData);
-  const [invoices, setInvoices] = useState([]);
-  const [code, setCode] = useState('');
-  const navigate = useNavigate();
-  const [issueDate, setIssueDate] = useState(null);
-  const [dueDate, setDueDate] = useState(null);
-  const [error, setError] = useState('');
-
+  
   const handleIssueDateChange = (date) => {
     setIssueDate(date);
-    validateDates(date, dueDate);
+    const formattedDate = date instanceof Date ? date.toISOString().slice(0, 10) : date;
+    setFormData({
+      ...formData,
+      invoiceDate: formattedDate,
+    });
+    validateDates(formattedDate, dueDate); 
   };
-
+  
   const handleDueDateChange = (date) => {
     setDueDate(date);
-    validateDates(issueDate, date);
+    const formattedDate = date instanceof Date ? date.toISOString().slice(0, 10) : date;
+    setFormData({
+      ...formData,
+      dueDate: formattedDate,
+    });
+    validateDates(issueDate, formattedDate); 
   };
-
+  
   const validateDates = (issueDate, dueDate) => {
-    if (issueDate && dueDate && dueDate < issueDate) {
+    if (issueDate && dueDate && new Date(dueDate) < new Date(issueDate)) {
       setError('Due date cannot be before the issue date');
     } else {
       setError('');
@@ -70,16 +81,6 @@ const AddInvoice = () => {
       items: [...formData.items, formData.currentItem],
       currentItem: { description: '', quantity: 1, rate: 0 },
     });
-  };
-
-  const handleStartDateChange = (date) => {
-    setStartDate(date);
-    // Add any additional logic you need for the start date change
-  };
-
-  const handleEndDateChange = (date) => {
-    setEndDate(date);
-    // Add any additional logic you need for the end date change
   };
 
   const handleDeleteItem = (index) => {
@@ -108,10 +109,31 @@ const AddInvoice = () => {
   
   async function handleGenerateInvoice() {
     try {
+
+      //validate input fields
+
+      if (
+        !formData.billFromStreetAddress ||
+        !formData.billFromCity ||
+        !formData.billFromPostalCode ||
+        !formData.billFromCountry ||
+        !formData.billToStreetAddress ||
+        !formData.billToCity ||
+        !formData.billToPostalCode ||
+        !formData.billToCountry ||
+        !formData.clientName ||
+        !formData.clientEmail ||
+        !formData.invoiceDate ||
+        !formData.dueDate ||
+        formData.items.length === 0
+      ) {
+        alert('Please fill out all fields.');
+        return;
+      }
+  
       const ref = await generateCode(); 
-      
       const newtotal = calculateTotal();
-      console.log(newtotal);
+      
       
       const {
         billFromStreetAddress,
@@ -129,6 +151,8 @@ const AddInvoice = () => {
         dueDate,
         items
       } = formData;
+
+      //insert to invoices
       
       const { data: insertData, error: insertError } = await supabase
         .from('Invoice')
@@ -148,12 +172,15 @@ const AddInvoice = () => {
           total: newtotal,
           invoiceDate,
           dueDate,
+          user_id: localStorage.getItem('userId')
         });
   
       if (insertError) {
         console.error('Error inserting into Invoice table:', insertError);
         return;
       }
+
+      //select recent Invoice_id entry to use for different table
   
       const { data: lastInsertData, error: lastInsertError } = await supabase
         .from('Invoice')
@@ -167,6 +194,8 @@ const AddInvoice = () => {
       }
   
       const insertedId = lastInsertData[0].Invoice_id;
+
+      //use Invoice_id to set Invoice items
 
       const itemsToInsert = items.map((item) => ({
         Invoice_id: insertedId,
@@ -191,8 +220,6 @@ const AddInvoice = () => {
         setValidationError('Due date must be after the invoice date.');
         return;
       }
-
-      // Existing code...
 
       console.log('Data inserted successfully. Inserted ID:', insertedId);
       navigate('../');
@@ -243,7 +270,10 @@ const AddInvoice = () => {
             type="text"
             className="mt-1 p-2 bg-cream w-full text-card outline-none rounded-md"
             value={formData.billFromPostalCode}
-            onChange={(e) => setFormData({ ...formData, billFromPostalCode: e.target.value })}
+            onChange={(e) => {
+              const postalCode = e.target.value.replace(/\D/g, '').slice(0, 4); // Extract only numbers and limit to 4 characters
+              setFormData({ ...formData, billFromPostalCode: postalCode });
+            }}
           />
         </div>
         <div>
@@ -305,7 +335,10 @@ const AddInvoice = () => {
             type="text"
             className="mt-1 p-2 bg-cream w-full text-card outline-none rounded-md"
             value={formData.billToPostalCode}
-            onChange={(e) => setFormData({ ...formData, billToPostalCode: e.target.value })}
+            onChange={(e) => {
+              const postalCode = e.target.value.replace(/\D/g, '').slice(0, 4);
+              setFormData({ ...formData, billToPostalCode: postalCode }); // Set the processed postal code
+            }}
           />
         </div>
         <div>
